@@ -1,0 +1,343 @@
+<?xml version="1.0"?>
+<block>
+  <name>matchstiq_source_s</name>
+  <key>matchstiq_source_s</key>
+  <category>Sources</category>
+  <throttle>1</throttle>
+  <import>import matchstiq</import>
+  <make>matchstiq.matchstiq_source_s($ip_address, $port)
+self.$(id).set_center_freq($freq)
+self.$(id).set_sample_rate($sample_rate)
+self.$(id).set_front_lna($front_lna)
+self.$(id).set_second_lna_gain($second_lna)
+self.$(id).set_step_atten($atten)
+self.$(id).set_rxvga1_gain($gain1)
+self.$(id).set_rxvga2_gain($gain2)
+self.$(id).set_tcvcxo_warp_voltage($warp_voltage)
+self.$(id).set_low_pass_filter($filter)
+self.$(id).set_decimation($decimation)
+self.$(id).set_preselect_filter($preselect)
+self.$(id).set_one_pps_source($pps_source)
+self.$(id).set_cic_coefficients($filename)
+  </make>
+
+  <callback>set_center_freq($freq)</callback>
+  <callback>set_sample_rate($sample_rate)</callback>
+  <callback>set_front_lna($front_lna)</callback>
+  <callback>set_second_lna_gain($second_lna)</callback>
+  <callback>set_step_atten($atten)</callback>
+  <callback>set_rxvga1_gain($gain1)</callback>
+  <callback>set_rxvga2_gain($gain2)</callback>
+  <callback>set_tcvcxo_warp_voltage($warp_voltage)</callback>
+  <callback>set_low_pass_filter($filter)</callback>
+  <callback>set_decimation($decimation)</callback>
+  <callback>set_preselect_filter($preselect)</callback>
+  <callback>set_one_pps_source($pps_source)</callback>
+  <callback>set_cic_coefficients($filename)</callback>
+
+  <!-- * type (complex, real, int, complex_vecotr, real_vector, int_vector, string, raw)-->
+
+  <param>
+    <name>Matchstiq IP Address</name>
+    <key>ip_address</key>
+    <value>"192.168.3.99"</value>
+    <type>string</type>
+  </param>
+  <param>
+    <name>Matchstiq Port</name>
+    <key>port</key>
+    <value>7737</value>
+    <type>int</type>
+  </param>
+  <param>
+    <name>Frequency (Hz)</name>
+    <key>freq</key>
+    <value>300000000</value>
+    <type>real</type>
+  </param>
+  <param>
+    <name>Sample Rate</name>
+    <key>sample_rate</key>
+    <value>500000</value>
+    <type>real</type>
+  </param>
+  <param>
+    <name>Front LNA State</name>
+    <key>front_lna</key>
+    <value>0</value>
+    <type>int</type>
+    <option>
+      <name>enabled</name>
+      <key>0</key>
+    </option>
+    <option>
+      <name>disabled</name>
+      <key>1</key>
+    </option>
+  </param>
+  <param>
+    <name>Second LNA Gain (dB)</name>
+    <key>second_lna</key>
+    <value>6</value>
+    <type>real</type>
+    <option>
+      <name>-6</name>
+      <key>-6</key>
+    </option>
+    <option>
+      <name>0</name>
+      <key>0</key>
+    </option>
+    <option>
+      <name>6</name>
+      <key>6</key>
+    </option>
+  </param>
+  <param>
+    <name>Attenuation (dB)</name>
+    <key>atten</key>
+    <value>0</value>
+    <type>real</type>
+  </param>
+  <param>
+    <name>First Gain Stage (rxvga1)</name>
+    <key>gain1</key>
+    <value>100</value>
+    <type>int</type>
+  </param>
+  <param>
+    <name>Second Gain Stage (rxvga2)</name>
+    <key>gain2</key>
+    <value>21</value>
+    <type>int</type>
+  </param>
+  <param>
+    <name>TCVCXO Warp Voltage</name>
+    <key>warp_voltage</key>
+    <value>2048</value>
+    <type>real</type>
+  </param>
+  <param>
+    <name>Low Pass Filter</name>
+    <key>filter</key>
+    <value>15</value>
+    <type>int</type>
+    <option>
+      <name>14MHz</name>
+      <key>0</key>
+    </option>
+    <option>
+      <name>10MHz</name>
+      <key>1</key>
+    </option>
+    <option>
+      <name>7MHz</name>
+      <key>2</key>
+    </option>
+    <option>
+      <name>6MHz</name>
+      <key>3</key>
+    </option>
+    <option>
+      <name>5MHz</name>
+      <key>4</key>
+    </option>
+    <option>
+      <name>4375kHz</name>
+      <key>5</key>
+    </option>
+    <option>
+      <name>3500kHz</name>
+      <key>6</key>
+    </option>
+    <option>
+      <name>3000kHz</name>
+      <key>7</key>
+    </option>
+    <option>
+      <name>2750kHz</name>
+      <key>8</key>
+    </option>
+    <option>
+      <name>2500kHz</name>
+      <key>9</key>
+    </option>
+    <option>
+      <name>1920kHz</name>
+      <key>10</key>
+    </option>
+    <option>
+      <name>1500kHz</name>
+      <key>11</key>
+    </option>
+    <option>
+      <name>1375kHz</name>
+      <key>12</key>
+    </option>
+    <option>
+      <name>1250kHz</name>
+      <key>13</key>
+    </option>
+    <option>
+      <name>875kHz</name>
+      <key>14</key>
+    </option>
+    <option>
+      <name>750kHz</name>
+      <key>15</key>
+    </option>
+  </param>
+  <param>
+    <name>Decimation</name>
+    <key>decimation</key>
+    <value>1</value>
+    <type>int</type>
+    <option>
+      <name>1</name>
+      <key>1</key>
+    </option>
+    <option>
+      <name>2</name>
+      <key>2</key>
+    </option>
+    <option>
+      <name>4</name>
+      <key>4</key>
+    </option>
+    <option>
+      <name>8</name>
+      <key>8</key>
+    </option>
+    <option>
+      <name>16</name>
+      <key>16</key>
+    </option>
+    <option>
+      <name>32</name>
+      <key>32</key>
+    </option>
+    <option>
+      <name>64</name>
+      <key>64</key>
+    </option>
+    <option>
+      <name>128</name>
+      <key>128</key>
+    </option>
+  </param>
+  <param>
+    <name>Preselect Filter</name>
+    <key>preselect</key>
+    <value>6</value>
+    <type>int</type>
+    <option>
+      <name>300-700</name>
+      <key>0</key>
+    </option>
+    <option>
+      <name>625-1080</name>
+      <key>1</key>
+    </option>
+    <option>
+      <name>1000-2100</name>
+      <key>2</key>
+    </option>
+    <option>
+      <name>1700-2500</name>
+      <key>3</key>
+    </option>
+    <option>
+      <name>2200-3800</name>
+      <key>4</key>
+    </option>
+    <option>
+      <name>Bypass</name>
+      <key>5</key>
+    </option>
+    <option>
+      <name>Auto</name>
+      <key>6</key>
+    </option>
+  </param>
+  <param>
+    <name>1PPS Source</name>
+    <key>pps_source</key>
+    <value>0</value>
+    <type>int</type>
+    <option>
+      <name>internal</name>
+      <key>0</key>
+    </option>
+    <option>
+      <name>external</name>
+      <key>1</key>
+    </option>
+  </param>
+  <param>
+    <name>CIC Coefficients File</name>
+    <key>filename</key>
+    <value>default</value>
+    <type>string</type>
+    <hide>all</hide>
+  </param>
+
+  <check>($freq &gt;= 300e6) and ($freq &lt;= 3700e6)</check>
+  <check>($sample_rate &gt;= 160e3) and ($sample_rate &lt;= 40e6)</check>
+  <check>($second_lna &gt;= -6) and ($second_lna &lt;= 6)</check>
+  <check>($atten &gt;= 0) and ($atten &lt;= 31.5) and (($atten % 0.5) == 0)</check>
+  <check>($gain1 &gt;= 2) and ($gain1 &lt;= 120)</check>
+  <check>($gain2 &gt;= 0) and ($gain2 &lt;= 30) and (($gain2 % 3) == 0)</check>
+  <check>($warp_voltage &gt;= 683) and ($warp_voltage &lt;= 3413)</check>
+
+  <source>
+    <name>out</name>
+    <type>short</type>
+  </source>
+
+  <doc>
+    This block supports using the Matchstiq as a source block.
+
+    * Frequency:
+       The center frequency in Hz
+
+    * Sample Rate:
+       A/D converter's sample rate.  To calculte the rate of
+       samples delivered, the decimation stage needs to be factored in.
+
+    * Front LNA State:
+       Enable or disable the the front gain LNA (~15 dB)
+
+    * Second LNA Gain:
+       Gain of second LNA in RX lineup
+
+    * Attenuation:
+       Attenuation in dB (0-31.5 in 0.5 steps)
+
+    * First Gain Stage (rxvga1):
+       First variable gain amplifier stage in the mixer of RF lineup
+       Gain provides ~25 dB gain but the mapping is not log-linear.
+       (Gain mapping example: 2 = ~5 dB, 102 = ~19 dB, 120 = ~30 dB)
+
+    * Second Gain Stage (rxvga2):
+       Second variable gain amplier stage in the mixer of RF lineup
+       Gain provides ~30 dB of gain in 3 dB steps.
+
+    * TCVCXO Warp Voltage:
+       Warp voltage for the ref clock oscillator.  The ref clock can
+       be pulled +/- 8 ppm by applying a 12-bit DAC voltage.
+       Valid warp voltages are 0.5-2.5V (values 683-3413)
+
+    * Low Pass Filter:
+        Baseband low pass filter cutoff frequency.
+
+    * Decimation:
+        CIC decimation stage.
+
+    * Preselect Filter:
+        Preselect filter on the RX path.
+
+    * 1PPS Source:
+        Source of 1PPS signal can either be internal (from GPS) or external.
+  </doc>
+
+</block>
