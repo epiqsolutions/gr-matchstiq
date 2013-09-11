@@ -46,7 +46,7 @@
 namespace gr {
     namespace matchstiq {
 
-#define DEBUG_MATCHSTIQ 1
+#define DEBUG_MATCHSTIQ 0
 #define DEBUG(A)    if( DEBUG_MATCHSTIQ ) printf("=debug=> %s\n", A)
 
 #define IQ_HEADER_SIZE (sizeof(gr::srfs::BINARY_IQ))
