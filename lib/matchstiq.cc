@@ -49,8 +49,8 @@ namespace gr {
 #define DEBUG_MATCHSTIQ 0
 #define DEBUG(A)    if( DEBUG_MATCHSTIQ ) printf("=debug=> %s\n", A)
 
-#define IQ_HEADER_SIZE (sizeof(gr::srfs::BINARY_IQ))
-#define BINARY_HEADER_SIZE (sizeof(gr::srfs::BINARY))
+#define IQ_HEADER_SIZE (sizeof(srfs::BINARY_IQ))
+#define BINARY_HEADER_SIZE (sizeof(srfs::BINARY))
 
 #define BUF_SIZE (65536)
 
@@ -813,9 +813,9 @@ matchstiq::read(char* buf, int size)
 		num_bytes += recv_result;
 	    }
 	}
-	gr::srfs::BINARY_IQ* binary_iq = (gr::srfs::BINARY_IQ*)(header);
+	srfs::BINARY_IQ* binary_iq = (srfs::BINARY_IQ*)(header);
 	// convert to host format
-	gr::srfs::BINARY_IQ_to_host( binary_iq );
+	srfs::BINARY_IQ_to_host( binary_iq );
 	// get the length of the payload from the header
 	uint32_t length = binary_iq->binary.length - IQ_HEADER_SIZE + BINARY_HEADER_SIZE;
 	num_bytes = 0;

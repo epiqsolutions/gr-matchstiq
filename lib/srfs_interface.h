@@ -28,64 +28,72 @@
 #include <stdint.h>
 #include <netinet/in.h>
 
-namespace gr {
-    namespace srfs {
+/** This file contains utilities to assist with communicating
+    with the SRFS app */
 
-	typedef enum 
-	{
-	    SRFS_UINT64,
-	    SRFS_UINT32,
-	    SRFS_UINT16,
-	    SRFS_UINT8,
-	    SRFS_FLOAT,
-	    SRFS_ENUM,
-	} SRFS_DATATYPES;
-	    
-	typedef struct
-	{
-	    SRFS_DATATYPES data_type;
-	    void *p_value; 
-	    int64_t min_value;
-	    int64_t max_value;
-	    float resolution;
-	    const std::string *p_strings;
-	} srfs_param_t;
+namespace srfs {
 
-	typedef struct __attribute__((__packed__))
-	{
-	    uint16_t indicator; /* always 0 */
-	    uint16_t type;
-	    uint32_t length; /* length of message in octets */
-	    uint8_t message[0];
-	} BINARY;
+    /** parameter data types */
+    typedef enum 
+    {
+	SRFS_UINT64,
+	SRFS_UINT32,
+	SRFS_UINT16,
+	SRFS_UINT8,
+	SRFS_FLOAT,
+	SRFS_ENUM,
+    } SRFS_DATATYPES;
+    
+    /** container of a SRFS parameter */
+    typedef struct 
+    {
+	SRFS_DATATYPES data_type;     /* type of data */
+	void *p_value;                /* pointer to actual value of parameter */
+	int64_t min_value;            /* min value of parameter */
+	int64_t max_value;            /* max value of parameter */
+	float resolution;             /* min resolution of parameter */
+	const std::string *p_strings; /* array of strings (used for enums only) */
+    } srfs_param_t;
+    
+    /* BINARY message format from SRFS */
+    typedef struct __attribute__((__packed__))
+    {
+	uint16_t indicator; /* always 0 */
+	uint16_t type;
+	uint32_t length; /* length of message in octets */
+	uint8_t message[0];
+    } BINARY;
+    
+    /* BINARY IQ message from SRFS */
+    typedef struct __attribute__((__packed__))
+    {
+	BINARY binary;
+	uint32_t config_id;
+	uint16_t format;
+	uint64_t timestamp;
+	int16_t iq[0];
+    } BINARY_IQ;
+    
+    /* converts a BINARY message to the host format */
+    bool BINARY_to_host( BINARY * const binary );
+    /* converts a BINARY_IQ message to host format */
+    bool BINARY_IQ_to_host( BINARY_IQ * const binary_iq );
+    /* returns the length contained in the BINARY_IQ message */
+    uint32_t BINARY_IQ_length_iq_in_pairs( const BINARY_IQ * const binary_iq );
+    
+    /* validates the value provided to ensure that it it falls within
+       the range and resolution.  If it's valid, then it sets the p_value */
+    bool set_param( srfs_param_t *p_param, void* p_value );
+    
+    /* reads in the string representation of the value and stores it
+       in p_param */
+    void update_param( srfs_param_t *p_param, const char* p_value );
 
-	typedef struct __attribute__((__packed__))
-	{
-	    BINARY binary;
-	    uint32_t config_id;
-	    uint16_t format;
-	    uint64_t timestamp;
-	    int16_t iq[0]; /* FIXME type varies depending on format */
-	} BINARY_IQ;
-	
-	bool BINARY_to_host( BINARY * const binary );
-	uint32_t BINARY_IQ_length_iq_in_pairs( const BINARY_IQ * const binary_iq );
-	bool BINARY_IQ_to_host( BINARY_IQ * const binary_iq );
-	
-	bool set_param( srfs_param_t *p_param, void* p_value );
-	
-	bool set_uint64( srfs_param_t *p_param, uint64_t value );
-	bool set_uint32( srfs_param_t *p_param, uint32_t value );
-	bool set_uint16( srfs_param_t *p_param, uint16_t value );
-	bool set_uint8( srfs_param_t *p_param, uint8_t value );
-	bool set_float( srfs_param_t *p_param, float value );
-
-	void update_param( srfs_param_t *p_param, const char* p_value );
-	
-	uint32_t convert_str_to_enum( const char* pString, 
-				      const std::string *pStrings, 
-				      uint32_t invalid_index );
-    } // namespace SRFS
-} // namespace gr
+    /* looks through *pStrings array for a match to pString.  invalid_index
+       is the max number of elements contained on pStrings */
+    uint32_t convert_str_to_enum( const char* pString, 
+				  const std::string *pStrings, 
+				  uint32_t invalid_index );
+} // namespace SRFS
 
 #endif

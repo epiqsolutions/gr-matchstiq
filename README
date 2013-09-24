@@ -29,3 +29,6 @@ To Build and Install (from the gr-matchstiq directory)
       > make
   5) Install it
       > sudo make install
+  6) Update dynamic linker for new library (Linux only)
+      > ldconfig
+ 
