@@ -22,7 +22,7 @@
 #include "config.h"
 #endif
 
-#include <gr_io_signature.h>
+#include <gnuradio/io_signature.h>
 #include "matchstiq_source_s_impl.h"
 
 #include <stdio.h>
@@ -46,9 +46,9 @@ namespace gr {
      */
     matchstiq_source_s_impl::matchstiq_source_s_impl(const std::string ip_address, 
 						     uint32_t port)
-      : gr_sync_block("matchstiq_source_s",
-		      gr_make_io_signature(0, 0, 0),
-		      gr_make_io_signature(1, 1, sizeof (short)))
+        : gr::sync_block("matchstiq_source_s",
+                         gr::io_signature::make(0, 0, 0),
+                         gr::io_signature::make(1, 1, sizeof (short)))
     {
 	rcv.reset( new matchstiq(ip_address.c_str(), port) );
 	set_output_multiple(MATCHSTIQ_SAMPLES_PER_PACKET*2);

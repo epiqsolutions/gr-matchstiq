@@ -26,6 +26,9 @@
 
 namespace srfs {
 
+    template <class T> bool check_range( T *p_param, T min, T max, T val );
+    template <class T> bool check_resolution( T *p_param, T res, T val );
+
     bool
     BINARY_to_host( BINARY * const binary )
     {

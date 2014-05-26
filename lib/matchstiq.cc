@@ -492,7 +492,7 @@ matchstiq::open_srfs()
     std::string str3;
 
     // reset to the default state
-    snprintf(cmd, 1024, "reset!\n", d_src_port);
+    snprintf(cmd, 1024, "reset!\n");
     send_msg( cmd );
     receive_msg( rcv, 1024 ); // clear out rcv buf
 

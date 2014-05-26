@@ -2,17 +2,14 @@ This directory contains the implementation of gr-matchstiq block, for
 use of GNU radio with Epiq Solutions' Matchstiq hardware 
 (http://epiqsolutions.com/matchstiq)
 
-What's New (from 06/21/2013 beta version):
-  * Work function has timeout on blocking calls
-  * Improved handling and parsing of configuration data
-  * Updated source block name to reflect output type 
-       (matchstiq_source_c is now matchstiq_source_s)
-  * Adherence to GNU radio coding style
-  * Improved error handling and stability
+What's New:
+  * Added support for GNU radio v3.7
+  * Fixed compiler warnings
 
 Know Limitations:
   * Supports only continuous mode operation
-  * Tested only under GNU radio v3.6.4
+
+To build for GNU radio v3.6.x, set to tag GNURADIO_v3.6.4
 
 To Build and Install (from the gr-matchstiq directory)
   1) Create a build directory

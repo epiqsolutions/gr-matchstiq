@@ -24,7 +24,7 @@
 
 #include <matchstiq/api.h>
 #include <matchstiq/matchstiq_defs.h>
-#include <gr_sync_block.h>
+#include <gnuradio/sync_block.h>
 
 namespace gr {
   namespace matchstiq {
@@ -34,7 +34,7 @@ namespace gr {
      * \ingroup matchstiq
      *
      */
-    class MATCHSTIQ_API matchstiq_source_s : virtual public gr_sync_block
+    class MATCHSTIQ_API matchstiq_source_s : virtual public gr::sync_block
     {
     public:
        typedef boost::shared_ptr<matchstiq_source_s> sptr;

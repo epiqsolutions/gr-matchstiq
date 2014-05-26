@@ -32,7 +32,7 @@ list(APPEND matchstiq_sources
 )
 
 add_library(gnuradio-matchstiq SHARED ${matchstiq_sources})
-target_link_libraries(gnuradio-matchstiq ${Boost_LIBRARIES} ${GRUEL_LIBRARIES} ${GNURADIO_CORE_LIBRARIES})
+target_link_libraries(gnuradio-matchstiq ${Boost_LIBRARIES} ${GNURADIO_RUNTIME_LIBRARIES})
 set_target_properties(gnuradio-matchstiq PROPERTIES DEFINE_SYMBOL "gnuradio_matchstiq_EXPORTS")
 
 ########################################################################

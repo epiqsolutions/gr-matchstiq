@@ -22,7 +22,7 @@
 #ifndef INCLUDED_MATCHSTIQ_API_H
 #define INCLUDED_MATCHSTIQ_API_H
 
-#include <gruel/attributes.h>
+#include <gnuradio/attributes.h>
 
 #ifdef gnuradio_matchstiq_EXPORTS
 #  define MATCHSTIQ_API __GR_ATTR_EXPORT
