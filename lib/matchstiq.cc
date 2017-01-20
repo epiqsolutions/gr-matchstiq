@@ -52,9 +52,15 @@ namespace gr {
 #define IQ_HEADER_SIZE (sizeof(srfs::BINARY_IQ))
 #define BINARY_HEADER_SIZE (sizeof(srfs::BINARY))
 
-#define BUF_SIZE (65536)
+// TODO: add this as a configuration parameter to the block
+// Note: there is a tradoff here between latency and performance
+// This value accounts for the frequency in which sample data is
+// provided.  The higher the packet size, the greater latency but
+// improved performance
+#define PKT_SIZE (40960)
+#define NUM_SAMPLES (PKT_SIZE/sizeof(uint32_t))
 
-#define NUM_RECV_ATTEMPTS (3)
+#define NUM_RECV_ATTEMPTS (10)
 
 #define FREQUENCY_MIN  300000000ULL
 #define FREQUENCY_MAX 3740000000ULL
@@ -137,6 +143,8 @@ matchstiq::matchstiq(const char* addr, unsigned short port)
     d_one_pps             = ONE_PPS_INTERNAL;
     d_cic_coefficients =    "default";
     d_srfs_src_status =   STATUS_DISABLED;
+
+    d_usleep_period = (1.0/((float)(d_rx_sample_rate)/1000000.0))*((float)(NUM_SAMPLES));
 
     d_state = STATE_STOPPED;
 
@@ -326,6 +334,8 @@ uint32_t
 matchstiq::set_rx_sample_rate(uint32_t rx_sample_rate)
 {
     set_param("sample_rate", &rx_sample_rate);
+    d_usleep_period = (1.0/((float)(d_rx_sample_rate)/1000000.0))*((float)(NUM_SAMPLES));
+    
     return d_rx_sample_rate;
 }
 
@@ -519,8 +529,8 @@ matchstiq::open_srfs()
     d_iq_port = atoi( str3.c_str() );
 
     // configure IQ to MATCHSTIQ-RX
-    snprintf(cmd, 1024, "config! block IQ:%d input MATCHSTIQ-RX:%d\n", 
-	     d_iq_port, d_src_port);
+    snprintf(cmd, 1024, "config! block IQ:%d input MATCHSTIQ-RX:%d block_send %d\n", 
+	     d_iq_port, d_src_port, (int32_t)(NUM_SAMPLES));
     send_msg( cmd );
     receive_msg( rcv, 1024 );
     
@@ -604,8 +614,8 @@ matchstiq::stop()
 {
     char cmd[1024];
     char rcv[1024];
-    char data[BUF_SIZE];
-    ssize_t num_bytes = BUF_SIZE;
+    char data[PKT_SIZE];
+    ssize_t num_bytes = PKT_SIZE;
     uint8_t count = 0;
 
     if( DEBUG_MATCHSTIQ ) {
@@ -623,7 +633,7 @@ matchstiq::stop()
 	while( count < 2 ) {
 	    num_bytes = recv( d_iq_sock,
 			      data,
-			      BUF_SIZE,
+			      PKT_SIZE,
 			      MSG_DONTWAIT );
 	    if( num_bytes != -1 ) {
 		count = 0;
@@ -754,8 +764,8 @@ matchstiq::config_src()
 int 
 matchstiq::read(char* buf, int size)
 {
-    static char data[BUF_SIZE];
-    static uint32_t dataIndex=BUF_SIZE;  // initialize to max, forcing data retrieval
+    static char data[PKT_SIZE];
+    static uint32_t dataIndex=PKT_SIZE;  // initialize to max, forcing data retrieval
     static uint64_t old_timestamp;
 
     uint64_t timestamp_diff;
@@ -769,21 +779,21 @@ matchstiq::read(char* buf, int size)
     // see if this is the first block we're receiving
     if( first ) {
 	// reset the index back to max to force more data retrieval
-	dataIndex = BUF_SIZE;
+	dataIndex = PKT_SIZE;
 	first = false;
     }
 
     int16_t *tmp = (int16_t*)(&data[dataIndex]);
     int16_t *tmpBuf = (int16_t*)(buf);
     uint32_t i=0;
-    for( i=0; (i<(size/2)) && (dataIndex < BUF_SIZE); i++ ) {
+    for( i=0; (i<(size/2)) && (dataIndex < PKT_SIZE); i++ ) {
 	tmpBuf[i] = be16toh( tmp[i] );
 	num_bytes_processed += 2;
 	dataIndex += 2;
     } 
 
     // see if we've ran out of buffer space
-    if( dataIndex >= BUF_SIZE ) {
+    if( dataIndex >= PKT_SIZE ) {
 	bMoreData = true;
     }
     
@@ -835,7 +845,7 @@ matchstiq::read(char* buf, int size)
 		    first = true;
 		    goto end_recv;
 		}
-		usleep(10*1000);
+		usleep(10*d_usleep_period);
 	    }
 	    else {
 		count = 0;
@@ -844,9 +854,9 @@ matchstiq::read(char* buf, int size)
 	}
 	// Check for dropped samples
 	timestamp_diff = binary_iq->timestamp - old_timestamp;
-	if ( timestamp_diff > (16384*d_decimation) )
+	if ( timestamp_diff > (NUM_SAMPLES*d_decimation) )
 	{
-	    printf("Dropped %lu samples\n", timestamp_diff-16384 );
+	    printf("Dropped %lu samples\n", timestamp_diff-NUM_SAMPLES );
 	}
 	old_timestamp = binary_iq->timestamp;
     }
